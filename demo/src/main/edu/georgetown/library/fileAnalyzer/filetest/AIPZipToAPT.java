@@ -57,7 +57,7 @@ class AIPZipToAPT extends AIPToAPT {
 	@Override public InitializationStatus init() {
 		InitializationStatus istat = super.init();
 		try {
-		    outdir = AIPZipToAPTHelper.createTempDir();
+		    outdir = AIPToAPTHelper.createTempDir();
 		} catch (IOException e) {
 			istat.addFailMessage(e.getMessage());
 		}

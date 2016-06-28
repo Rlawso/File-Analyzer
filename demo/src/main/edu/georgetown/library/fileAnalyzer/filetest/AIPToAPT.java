@@ -73,15 +73,16 @@ abstract class AIPToAPT extends DefaultFileTest {
 	@Override
 	public Object fileTest(File f) {
 		Stats stat = getStats(f);
-		APTrustHelper aptHelper = new APTrustHelper(f);
-		aptHelper.setAccessType((Access)pAccess.getValue());
-		aptHelper.setInstitutionId(this.getProperty(APTrustHelper.P_INSTID).toString());
-		aptHelper.setSourceOrg(this.getProperty(APTrustHelper.P_SRCORG).toString());
-		aptHelper.setBagCount(1);
-		aptHelper.setBagTotal(1);
 		
 		try {
-		    AIPToAPTHelper aipToAptHelper = getAIPToAPTHelper();
+	        APTrustHelper aptHelper = new APTrustHelper(f);
+	        aptHelper.setAccessType((Access)pAccess.getValue());
+	        aptHelper.setInstitutionId(this.getProperty(APTrustHelper.P_INSTID).toString());
+	        aptHelper.setSourceOrg(this.getProperty(APTrustHelper.P_SRCORG).toString());
+	        aptHelper.setBagCount(1);
+	        aptHelper.setBagTotal(1);
+
+	        AIPToAPTHelper aipToAptHelper = getAIPToAPTHelper();
             int count = aipToAptHelper.bag(f, aptHelper);
 			stat.setVal(BagStatsItems.Count, count);
 			stat.setVal(BagStatsItems.Bag, aptHelper.getFinalBagName());

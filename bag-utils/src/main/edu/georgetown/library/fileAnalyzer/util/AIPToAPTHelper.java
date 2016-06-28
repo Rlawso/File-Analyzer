@@ -3,6 +3,8 @@ package edu.georgetown.library.fileAnalyzer.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public abstract class AIPToAPTHelper {
     public static final String AIPEXTRACT = "aipextract_";
@@ -18,5 +20,11 @@ public abstract class AIPToAPTHelper {
         return count;
     }
 
+    public static File createTempDir() throws IOException {
+        Path outpath = Files.createTempDirectory(AIPToAPTHelper.AIPEXTRACT);
+        File outdir = outpath.toFile();
+        outdir.deleteOnExit();
+        return outdir;        
+    }
 
 }

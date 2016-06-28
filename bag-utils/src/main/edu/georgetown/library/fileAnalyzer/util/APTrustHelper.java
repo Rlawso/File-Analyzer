@@ -36,6 +36,7 @@ public class APTrustHelper extends TarBagHelper {
     public enum Access {Consortia, Restricted, Institution;}
 
     File aptinfo;
+    File dest;
     
     public APTrustHelper(File parent) {
     	super(parent);
@@ -122,6 +123,8 @@ public class APTrustHelper extends TarBagHelper {
             sb.append(bagTotal);            
         }
 
+        dest = new File(data.parent, sb.toString()+ ".tar");
+        data.parent = new File(System.getProperty("java.io.tmpdir"));
 		data.newBag = new File(data.parent, sb.toString());
     }
     
@@ -150,7 +153,7 @@ public class APTrustHelper extends TarBagHelper {
     
     @Override public void writeBagFile() throws IOException, IncompleteSettingsException {
     	if (aptinfo == null) throw new IncompleteSettingsException("Aptinfo File must be created - call generateBagInfoFiles()");
-    	super.writeBagFile();
+    	super.writeBagFile(dest);
 	    aptinfo.delete();
     }
 

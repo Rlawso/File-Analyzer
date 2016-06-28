@@ -24,9 +24,12 @@ public class TarUtil {
         return tarout;
     }
 
+    public static File getTarFile(File folder) {
+        return new File(folder.getParentFile(), folder.getName() + ".tar");
+    }
+
     public static File tarFolder(File folder) throws FileNotFoundException, IOException {
-		File tarout = new File(folder.getParentFile(), folder.getName() + ".tar");
-		return tarFolder(folder, tarout);
+		return tarFolder(folder, getTarFile(folder));
 	}
 
 	public static File tarFolderAndDeleteFolder(File folder) throws FileNotFoundException, IOException {

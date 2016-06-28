@@ -39,8 +39,8 @@ public class APTrustHelper extends TarBagHelper {
 
     File aptinfo;
     
-    public APTrustHelper(File parent) {
-    	super(parent);
+    public APTrustHelper(File parent) throws IOException {
+    	super(AIPToAPTHelper.createTempDir(), parent.getParentFile());
     }
     
     private String instId = null;

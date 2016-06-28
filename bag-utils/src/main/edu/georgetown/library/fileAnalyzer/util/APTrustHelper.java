@@ -125,15 +125,6 @@ public class APTrustHelper extends TarBagHelper {
         }
 
         data.newBag = new File(data.parent, sb.toString());
-        try {
-            Path temp = Files.createTempDirectory(new File(System.getProperty("java.io.tmpdir")).toPath(), "bagtemp");
-            Path link = Files.createSymbolicLink(data.newBag.toPath(), temp);
-            data.newBag = link.toFile();
-        } catch(UnsupportedOperationException e) {
-            System.out.println("Could not create symlink, using regular directory " + data.newBag.getAbsolutePath());
-        } catch(IOException e) {
-            System.out.println(e.getMessage() + " Error creating symlink, using regular directory " + data.newBag.getAbsolutePath());
-        }
     }
     
     public Bag getBag() {

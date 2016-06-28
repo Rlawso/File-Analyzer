@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
@@ -40,7 +38,7 @@ public class APTrustHelper extends TarBagHelper {
     File aptinfo;
     
     public APTrustHelper(File parent) throws IOException {
-    	super(AIPToAPTHelper.createTempDir(), parent.getParentFile());
+    	super(new File(AIPToAPTHelper.createTempDir(), "bagging"), parent.getParentFile());
     }
     
     private String instId = null;

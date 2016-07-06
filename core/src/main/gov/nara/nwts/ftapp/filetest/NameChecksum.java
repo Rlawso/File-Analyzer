@@ -10,14 +10,15 @@ import gov.nara.nwts.ftapp.stats.Stats;
 import gov.nara.nwts.ftapp.stats.StatsItemConfig;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import edu.georgetown.library.fileAnalyzer.util.Algorithm;
+import edu.georgetown.library.fileAnalyzer.util.ChecksumTool;
 
 /**
  * Abstract class for rules that report on checksum values; derived versions of this class will provide a specific hashing algorithm from the Java core library.
@@ -31,18 +32,6 @@ public class NameChecksum extends DefaultFileTest {
 	public static final String KEY = "Key";
 	public static enum KEYTYPE {NAME, PATH;}
 	
-	static enum Algorithm {
-		MD5("MD5"),
-		SHA1("SHA-1"),
-		SHA256("SHA-256"),
-		SHA384("SHA-384"),
-		SHA512("SHA-512");
-		String algorithm;
-		Algorithm(String s) {algorithm = s;}
-		MessageDigest getInstance() throws NoSuchAlgorithmException {
-			return MessageDigest.getInstance(algorithm);
-		}
-	}
 
 	public NameChecksum(FTDriver dt) {
 		super(dt);
@@ -95,35 +84,14 @@ public class NameChecksum extends DefaultFileTest {
     public String getShortName(){return "Checksum";}
 
     public String getChecksum(File f) {
-    	Algorithm algorithm = (Algorithm)getProperty(ALGORITHM);
-    	FileInputStream fis = null;
 		try {
-			MessageDigest md = algorithm.getInstance();
-			fis = new FileInputStream(f);
-			byte[] dataBytes = new byte[1204];
-			int nread = 0;
-			while((nread = fis.read(dataBytes)) != -1){
-				md.update(dataBytes, 0, nread);
-			}
-			byte[] mdbytes = md.digest();
-			StringBuffer sb = new StringBuffer();
-			for(int i=0; i<mdbytes.length; i++){
-				sb.append(Integer.toString((mdbytes[i] & 0xFF) + 0x100, 16).substring(1));
-			}
-			return sb.toString();
+	        return ChecksumTool.getChecksum(getProperty(ALGORITHM).toString(), f);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			if (fis!=null)
-				try {
-					fis.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 		}
 		return null;    	
     }

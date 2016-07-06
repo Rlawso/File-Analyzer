@@ -16,6 +16,7 @@ import edu.georgetown.library.fileAnalyzer.util.AIPToAPTHelper;
 import edu.georgetown.library.fileAnalyzer.util.AIPZipToAPTHelper;
 import edu.georgetown.library.fileAnalyzer.util.APTrustHelper;
 import edu.georgetown.library.fileAnalyzer.util.APTrustHelper.Access;
+import edu.georgetown.library.fileAnalyzer.util.CmdUtil;
 import edu.georgetown.library.fileAnalyzer.util.IncompleteSettingsException;
 import edu.georgetown.library.fileAnalyzer.util.InvalidFilenameException;
 import edu.georgetown.library.fileAnalyzer.util.InvalidMetadataException;
@@ -23,34 +24,28 @@ import edu.georgetown.library.fileAnalyzer.util.InvalidMetadataException;
 public class AIPToAPTCmd {
     public AIPToAPTCmd(){}
     
-    public static final void fail(String message) {
-        System.err.println(message);
-        System.exit(FAIL);
-    }
-    
     private static enum CONVTYPE {ZIP,DIR;}
     public static final String CMD = "AIPToAPTCmd";
-    public static final int FAIL = 100;
     
     public static File testInputFile(CONVTYPE convType, String name) {
         File input = new File(name);
         if (!input.exists()) {
-            fail(String.format("File (%s) does not exist", name));            
+            CmdUtil.fail(String.format("File (%s) does not exist", name));            
         }
 
         if (convType == CONVTYPE.ZIP) {
             if (!name.toLowerCase().endsWith(".zip")) {
                 usage();
-                fail(String.format("AIP_Zip file (%s) must end with .zip", name));
+                CmdUtil.fail(String.format("AIP_Zip file (%s) must end with .zip", name));
             }
             if (!input.isFile()) {
                 usage();
-                fail(String.format("AIP_Zip File (%s) must be a regular file", name));            
+                CmdUtil.fail(String.format("AIP_Zip File (%s) must be a regular file", name));            
             }            
         } else {
             if (!input.isDirectory()) {
                 usage();
-                fail(String.format("AIP_Dir (%s) must be a directory", name));            
+                CmdUtil.fail(String.format("AIP_Dir (%s) must be a directory", name));            
             }                        
         }
         return input;
@@ -84,7 +79,7 @@ public class AIPToAPTCmd {
         
         if (cmdLine.getArgs().length == 0){
             usage();
-            fail("Specify the name of the AIP file/folder");            
+            CmdUtil.fail("Specify the name of the AIP file/folder");            
         }
         
         File input = testInputFile(convType, cmdLine.getArgs()[0]);
@@ -99,14 +94,14 @@ public class AIPToAPTCmd {
         try {
             minCount = Integer.parseInt(minstr);            
         } catch(NumberFormatException e) {
-            fail("Option -min must be numberic");
+            CmdUtil.fail("Option -min must be numberic");
         }
 
         int count = aipHelper.bag(input, aptHelper);
         if (count == 0) {
-            fail(String.format("No items written to bag file (%s)", aptHelper.getFinalBagName()));
+            CmdUtil.fail(String.format("No items written to bag file (%s)", aptHelper.getFinalBagName()));
         } else if (count < minCount) {
-            fail(String.format("Bag file (%s) must have at least (%d) files", aptHelper.getFinalBagName(), minCount));
+            CmdUtil.fail(String.format("Bag file (%s) must have at least (%d) files", aptHelper.getFinalBagName(), minCount));
         }
         System.out.println(String.format("Bag Complete: %d item(s) written to bag (%s)", count, aptHelper.getFinalBagName()));
         return count;
@@ -119,7 +114,7 @@ public class AIPToAPTCmd {
             convertCommand(cmdLine);
         } catch (IOException | IncompleteSettingsException | InvalidMetadataException | InvalidFilenameException e) {
             e.printStackTrace();
-            fail(e.getMessage());
+            CmdUtil.fail(e.getMessage());
         }
     }
 
@@ -160,7 +155,7 @@ public class AIPToAPTCmd {
         } catch (ParseException e) {
             usage();
             formatter.printHelp(CMD, opts);
-            fail("Invalid Options");
+            CmdUtil.fail("Invalid Options");
         }
         return null;
     }

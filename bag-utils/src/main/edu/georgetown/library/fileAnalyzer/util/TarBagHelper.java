@@ -6,15 +6,23 @@ import java.io.IOException;
 import edu.georgetown.library.fileAnalyzer.util.TarUtil;
 
 public class TarBagHelper extends FABagHelper {
-    
-    public TarBagHelper(File source) {
-    	super(source);
-    }
-    
-    @Override public void writeBagFile() throws IOException, IncompleteSettingsException {
-    	super.writeBagFile();
+        private boolean createTar;
 
-    	data.newBag = TarUtil.tarFolderAndDeleteFolder(data.newBag);
-    }
-    
+        public TarBagHelper(File source) {
+                this(source, true);
+        }
+        public TarBagHelper(File source, boolean createTar) {
+                super(source);
+                this.createTar = createTar;
+        }
+
+        @Override
+        public void writeBagFile() throws IOException, IncompleteSettingsException {
+                super.writeBagFile();
+
+                if (createTar) {
+                        data.newBag = TarUtil.tarFolderAndDeleteFolder(data.newBag);
+                }
+        }
+
 }

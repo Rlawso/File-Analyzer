@@ -78,6 +78,8 @@ public class AIPToAPTCmd {
         if (cmdLine.hasOption("r")) {
             access = Access.Restricted;
         }
+        
+        boolean makeTar = !cmdLine.hasOption("s");
         String srcOrg = cmdLine.getOptionValue("srcorg","SrcOrg");
         String sendId = cmdLine.getOptionValue("srcorg","SendId");
         String minstr = cmdLine.getOptionValue("min", "1");
@@ -89,7 +91,7 @@ public class AIPToAPTCmd {
         }
         
         File input = testInputFile(convType, cmdLine.getArgs()[0]);
-        APTrustHelper aptHelper = new APTrustHelper(input, allowRename);
+        APTrustHelper aptHelper = new APTrustHelper(input, allowRename, makeTar);
         aptHelper.setAccessType(access);
         aptHelper.setInstitutionId(sendId);
         aptHelper.setSourceOrg(srcOrg);
@@ -161,6 +163,7 @@ public class AIPToAPTCmd {
         opts.addOptionGroup(optGrp2);
         opts.addOption("srcorg", true, "Src Organization");
         opts.getOption("srcorg").setRequired(true);
+        opts.addOption("s", false, "Skip tar file creation");
         opts.addOption("min", true, "Min number of files requried");
         opts.addOption("rename", false, "Allow source files to be renamed");
         opts.addOption("compareFile", true, "Optional Checksum Compare File.  Comma Separated: MD5,path");

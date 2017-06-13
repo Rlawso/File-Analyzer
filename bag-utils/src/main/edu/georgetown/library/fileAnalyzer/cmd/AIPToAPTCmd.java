@@ -79,7 +79,7 @@ public class AIPToAPTCmd {
             access = Access.Restricted;
         }
         
-        boolean makeTar = !cmdLine.hasOption("s");
+        boolean makeTar = !cmdLine.hasOption("skipTar");
         String srcOrg = cmdLine.getOptionValue("srcorg","SrcOrg");
         String sendId = cmdLine.getOptionValue("srcorg","SendId");
         String minstr = cmdLine.getOptionValue("min", "1");
@@ -143,8 +143,8 @@ public class AIPToAPTCmd {
     }
 
     public static void usage() {
-        System.out.println(String.format("%s -dir (-consortia|-institution|-restricted) -srcorg SrcOrg [-min 1] [-rename] [-compareFile <file>] <AIP_Dir>", CMD));
-        System.out.println(String.format("%s -zip (-consortia|-institution|-restricted) -srcorg SrcOrg [-min 1] [-rename] [-compareFile <file>] <AIP_Zip>", CMD));
+        System.out.println(String.format("%s -dir (-consortia|-institution|-restricted) -srcorg SrcOrg [-min 1] [-rename] [-skipTar] [-compareFile <file>] <AIP_Dir>", CMD));
+        System.out.println(String.format("%s -zip (-consortia|-institution|-restricted) -srcorg SrcOrg [-min 1] [-rename] [-skipTar] [-compareFile <file>] <AIP_Zip>", CMD));
     }
     
     public static CommandLine parseAipCommandLine(String main, String[] args) {
@@ -163,7 +163,7 @@ public class AIPToAPTCmd {
         opts.addOptionGroup(optGrp2);
         opts.addOption("srcorg", true, "Src Organization");
         opts.getOption("srcorg").setRequired(true);
-        opts.addOption("s", false, "Skip tar file creation");
+        opts.addOption("skipTar", false, "Skip tar file creation");
         opts.addOption("min", true, "Min number of files requried");
         opts.addOption("rename", false, "Allow source files to be renamed");
         opts.addOption("compareFile", true, "Optional Checksum Compare File.  Comma Separated: MD5,path");

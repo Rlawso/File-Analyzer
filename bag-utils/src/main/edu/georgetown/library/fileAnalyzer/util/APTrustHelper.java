@@ -242,7 +242,7 @@ public class APTrustHelper extends TarBagHelper {
             String id = xp.evaluate("/ead/archdesc/did/unitid/text()", doc);
             if (id == null) throw new InvalidMetadataException("The ead must have a unitid");
             if (id.isEmpty()) throw new InvalidMetadataException("The ead must not have an empty unitid");
-            id = id.trim().replaceAll("\\s+", ".");
+            if (id.contains(" ")) throw new InvalidMetadataException("The ead unitid should not contain spaces");
             setInstitutionalSenderId(id);
 	    setItemIdentifer(id);
             
